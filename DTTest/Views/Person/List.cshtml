@@ -1,0 +1,46 @@
+﻿@*@using Kendo.Mvc.UI;*@
+@using Telerik.Web.Mvc.UI;
+
+@model IQueryable<DTTest.Models.Person>
+@*@model IEnumerable<DTTest.Models.RaceSource>*@
+
+@{
+    ViewBag.Title = "List Person";
+}
+
+@*@foreach (var p in Model) {  
+    <div class="item"> 
+        <h3>@p.Name</h3> 
+        @p.ToString(); 
+              
+    </div>     
+} *@
+
+
+<h2>List</h2>
+
+<div>
+   @* @(Html.Kendo().ComboBox()
+          .Name("fabric")
+          .BindTo(new SelectList(Model, "Value", "RaceName"))
+          .DataTextField("Text")
+          .DataValueField("Value")
+          .SelectedIndex(0)
+    )*@
+</div>
+
+<div>
+@*    @(Html.Kendo().Grid<DTTest.Models.Person>()
+   .Name("People")
+   .DataSource(datasource => datasource.Ajax().Read(read => read.Action("ShowPersons", "Person")))
+   .Columns(columns => { columns.Bound(person => person.Name); columns.Bound(person => person.Age); })
+   .Pageable()
+   .Sortable()
+   )*@
+
+
+@(Html.Telerik().Grid(Model)
+.Name("people")
+.DataBinding(databind => databind.Ajax().Select("ShowPersons", "Person"))
+.Pageable().Sortable())
+</div>

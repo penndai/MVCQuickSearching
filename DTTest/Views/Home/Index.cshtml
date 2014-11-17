@@ -1,0 +1,94 @@
+﻿@using DTTest.HtmlHelpers;
+
+@model DTTest.Models.PeopleViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+@section featured {
+    <section class="featured">
+        <div class="content-wrapper">
+            <hgroup class="title">
+                <h1>@ViewBag.Title.</h1>
+            </hgroup>
+        </div>
+    </section>
+}
+<ul id="jsonRequestData">
+</ul>
+<a href="#" id="requestFun">Get Json Data</a>
+
+<div>
+    <table>
+        <tr>
+            <td>
+                <h3>Select a Course </h3>
+            </td>
+            <td>
+                <select id="sltRace">
+                    <option value="0">Select Race</option>
+
+                    @foreach (var item in Model.RaceSources)
+                    {
+                        if (Model.CurrentRace != item.Value)
+                        {
+                        <option value="@item.Value">@item.RaceName
+                        </option>
+                        }
+                        else
+                        {
+                        <option value="@item.Value" selected="selected">@item.RaceName
+                        </option>
+                        }
+
+                    }
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <div id="facultyDetailSection">
+        <h4>Faculties who teach selected course</h4>
+        <div id="facultyDetailTable">
+
+            @foreach (var p in Model.People)
+            {                           
+                <h3>@p.ToString()</h3>
+            }
+        </div>
+    </div>
+    <div class="pager">
+        @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x, race = Model.CurrentRace }))
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("#sltRace").change(function () {
+        window.location.href = '/' + $("#sltRace").val();
+    });
+
+    $(document).ready(function () {
+        $("#requestFun").click(function () {          
+            var race = $("#sltRace").val();
+
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("ReturnPeopleJson"))",
+                data: { "raceid": race },
+                success: function (data) {
+                    // clear unlist
+                    $("ul").empty();
+
+                    $("<li>Average age: " + data.AverageAge + "</li>").appendTo("#jsonRequestData");
+                    $("<li>Max age: " + data.MaxAge + "</li>").appendTo("#jsonRequestData");
+                    $("<li>Min age: " + data.MinAge + "</li>").appendTo("#jsonRequestData");
+                    $("<li>Total number of people: " + data.NumberOfPeople + "</li>").appendTo("#jsonRequestData");
+                    $("<li>Count of race " + data.CountOfEachRace + "</li>").appendTo("#jsonRequestData");
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to retrieve books.');
+                }
+            });
+        });
+    });
+</script>

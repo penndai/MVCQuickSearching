@@ -1,0 +1,8 @@
+
+Using Ninject for Dependency Inject to decouple the components in the MVC application:
+To create instance of IPersonRepository and inject it as a contructor parameter.
+
+Using Mock
+The PersonReposity is a mock implementation of the IPersonRepository interface. I do not implement the true functionality that a real repository would need. I just did enough to be able to write test page. 
+
+I created the fake implementation and added 10000 random persons which makes the PersonRepository class a manual mock.
